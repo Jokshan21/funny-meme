@@ -2,66 +2,48 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Heart Explosion</title>
+  <title>Love Animation</title>
   <style>
     body {
+      background-color: black;
       margin: 0;
-      background: #111;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
       overflow: hidden;
+      font-family: 'My Love', sans-serif;
     }
 
-    #heart {
+    .Love__You {
+      color: #ff69b4;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+      margin-top: 50px;
+      font-size: 16px;
       position: relative;
-      width: 100px;
-      height: 90px;
-      background: red;
-      transform: rotate(-45deg);
-      cursor: pointer;
-      animation: pulse 1s infinite;
     }
 
-    #heart::before,
-    #heart::after {
-      content: '';
+    .love-text {
+      animation: flicker 1.5s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 0.4; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .firework {
       position: absolute;
-      width: 100px;
-      height: 90px;
-      background: red;
       border-radius: 50%;
-    }
-
-    #heart::before {
-      top: -50px;
-      left: 0;
-    }
-
-    #heart::after {
-      left: 50px;
-      top: 0;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1) rotate(-45deg); }
-      50% { transform: scale(1.1) rotate(-45deg); }
-      100% { transform: scale(1) rotate(-45deg); }
-    }
-
-    .sprinkle {
-      position: absolute;
       width: 6px;
       height: 6px;
-      background: hsl(var(--hue), 100%, 60%);
-      border-radius: 50%;
-      animation: explode 1s forwards;
+      background-color: #ff69b4;
+      animation: explode 1s ease-out forwards;
     }
 
     @keyframes explode {
-      0% { transform: translate(0, 0) scale(1); opacity: 1; }
-      100% {
+      to {
         transform: translate(var(--x), var(--y)) scale(0.8);
         opacity: 0;
       }
@@ -69,34 +51,38 @@
   </style>
 </head>
 <body>
+  <div class="Love__You" id="loveContainer"></div>
 
-<div id="heart"></div>
+  <script>
+    const phrases = ["Te Amo", "My Love", "Love", "Te Amo", "Te Amo", "My Love"];
+    const container = document.getElementById('loveContainer');
 
-<script>
-  const heart = document.getElementById("heart");
-
-  heart.addEventListener("click", () => {
-    for (let i = 0; i < 50; i++) {
-      const sprinkle = document.createElement("div");
-      sprinkle.className = "sprinkle";
-      const angle = Math.random() * 2 * Math.PI;
-      const distance = Math.random() * 150 + 50;
-      const x = Math.cos(angle) * distance + "px";
-      const y = Math.sin(angle) * distance + "px";
-      sprinkle.style.setProperty("--x", x);
-      sprinkle.style.setProperty("--y", y);
-      sprinkle.style.setProperty("--hue", Math.floor(Math.random() * 360));
-      sprinkle.style.left = "50%";
-      sprinkle.style.top = "50%";
-      document.body.appendChild(sprinkle);
-      setTimeout(() => sprinkle.remove(), 1000);
+    // Fill the screen with love texts
+    for (let i = 0; i < 300; i++) {
+      const span = document.createElement('span');
+      span.className = 'love-text';
+      span.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+      span.style.margin = '3px';
+      container.appendChild(span);
     }
 
-    // Optional: stop pulsing for a moment
-    heart.style.animation = "none";
-    setTimeout(() => heart.style.animation = "pulse 1s infinite", 500);
-  });
-</script>
-
+    // Firework burst
+    setInterval(() => {
+      for (let i = 0; i < 30; i++) {
+        const fw = document.createElement('div');
+        fw.className = 'firework';
+        const angle = Math.random() * 2 * Math.PI;
+        const dist = Math.random() * 150 + 50;
+        const x = Math.cos(angle) * dist + 'px';
+        const y = Math.sin(angle) * dist + 'px';
+        fw.style.setProperty('--x', x);
+        fw.style.setProperty('--y', y);
+        fw.style.left = '50%';
+        fw.style.top = '50%';
+        document.body.appendChild(fw);
+        setTimeout(() => fw.remove(), 1000);
+      }
+    }, 1500);
+  </script>
 </body>
 </html>
